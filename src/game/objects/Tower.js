@@ -1,7 +1,7 @@
 import { GameObjects } from 'phaser';
 import { Projectile } from './Projectile';
 
-const RADIUS = 14;
+export const TOWER_RADIUS = 14;
 const BARREL_LENGTH = 20;
 
 export class Tower extends GameObjects.Container
@@ -16,8 +16,8 @@ export class Tower extends GameObjects.Container
         this.fireCooldown = 0;
         this.target = null;
 
-        const base = new GameObjects.Arc(scene, 0, 0, RADIUS, 0, 360, false, 0x2196f3, 1);
-        this.barrel = new GameObjects.Rectangle(scene, RADIUS, 0, BARREL_LENGTH, 6, 0x1565c0, 1).setOrigin(0, 0.5);
+        const base = new GameObjects.Arc(scene, 0, 0, TOWER_RADIUS, 0, 360, false, 0x2196f3, 1);
+        this.barrel = new GameObjects.Rectangle(scene, TOWER_RADIUS, 0, BARREL_LENGTH, 6, 0x1565c0, 1).setOrigin(0, 0.5);
 
         this.add([ base, this.barrel ]);
 
