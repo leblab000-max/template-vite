@@ -1,5 +1,7 @@
 import { Scene } from 'phaser';
 import { Enemy } from '../objects/Enemy';
+import { Tower } from '../objects/Tower';
+import { Projectile } from '../objects/Projectile';
 
 export class Game extends Scene
 {
@@ -22,18 +24,58 @@ export class Game extends Scene
             { x: 800, y: 500 }
         ];
 
+        //  Kept as plain arrays (rather than one-off fields) so a future wave spawner can just
+        //  keep pushing more enemies in, and towers/projectiles can loop over every one of them
+        this.enemies = [];
+        this.towers = [];
+        this.projectiles = [];
+
         this.drawBackground();
         this.drawPath();
 
-        this.enemy = new Enemy(this, this.path, 80);
+        this.spawnEnemy();
+
+        this.towers.push(new Tower(this, 300, 170));
     }
 
     update (time, delta)
     {
-        if (this.enemy && this.enemy.active)
+        for (const enemy of this.enemies)
         {
-            this.enemy.update(time, delta);
+            enemy.update(time, delta);
         }
+
+        this.enemies = this.enemies.filter((enemy) => enemy.active);
+
+        for (const tower of this.towers)
+        {
+            tower.update(time, delta, this.enemies);
+        }
+
+        for (const projectile of this.projectiles)
+        {
+            projectile.update(time, delta, this.enemies);
+        }
+
+        this.projectiles = this.projectiles.filter((projectile) => projectile.active);
+    }
+
+    spawnEnemy (speed = 80)
+    {
+        const enemy = new Enemy(this, this.path, speed);
+
+        this.enemies.push(enemy);
+
+        return enemy;
+    }
+
+    spawnProjectile (x, y, targetX, targetY)
+    {
+        const projectile = new Projectile(this, x, y, targetX, targetY);
+
+        this.projectiles.push(projectile);
+
+        return projectile;
     }
 
     drawBackground ()
