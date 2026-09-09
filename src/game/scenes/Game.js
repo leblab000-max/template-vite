@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { Enemy } from '../objects/Enemy';
 
 export class Game extends Scene
 {
@@ -23,6 +24,16 @@ export class Game extends Scene
 
         this.drawBackground();
         this.drawPath();
+
+        this.enemy = new Enemy(this, this.path, 80);
+    }
+
+    update (time, delta)
+    {
+        if (this.enemy && this.enemy.active)
+        {
+            this.enemy.update(time, delta);
+        }
     }
 
     drawBackground ()
