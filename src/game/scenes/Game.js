@@ -29,9 +29,15 @@ export class Game extends Scene
         this.enemies = [];
         this.towers = [];
         this.projectiles = [];
+        this.gold = 0;
 
         this.drawBackground();
         this.drawPath();
+
+        this.goldText = this.add.text(16, 16, 'Gold: 0', {
+            fontFamily: 'Arial Black', fontSize: 20, color: '#ffd700',
+            stroke: '#000000', strokeThickness: 4
+        });
 
         this.spawnEnemy();
 
@@ -69,13 +75,21 @@ export class Game extends Scene
         return enemy;
     }
 
-    spawnProjectile (x, y, targetX, targetY)
+    spawnProjectile (x, y, targetX, targetY, damage = 10)
     {
-        const projectile = new Projectile(this, x, y, targetX, targetY);
+        const projectile = new Projectile(this, x, y, targetX, targetY, damage);
 
         this.projectiles.push(projectile);
 
         return projectile;
+    }
+
+    awardGold (amount)
+    {
+        this.gold += amount;
+        this.goldText.setText(`Gold: ${this.gold}`);
+
+        console.log(`+${amount} gold (total: ${this.gold})`);
     }
 
     drawBackground ()

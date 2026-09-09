@@ -5,9 +5,11 @@ const HIT_DISTANCE = 18;
 
 export class Projectile extends GameObjects.Arc
 {
-    constructor (scene, x, y, targetX, targetY, speed = 300)
+    constructor (scene, x, y, targetX, targetY, damage = 10, speed = 300)
     {
         super(scene, x, y, RADIUS, 0, 360, false, 0xffeb3b, 1);
+
+        this.damage = damage;
 
         const dx = targetX - x;
         const dy = targetY - y;
@@ -45,6 +47,7 @@ export class Projectile extends GameObjects.Arc
 
             if (Math.sqrt(dx * dx + dy * dy) <= HIT_DISTANCE)
             {
+                enemy.takeDamage(this.damage);
                 this.destroy();
                 return;
             }

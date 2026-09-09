@@ -6,12 +6,13 @@ const BARREL_LENGTH = 20;
 
 export class Tower extends GameObjects.Container
 {
-    constructor (scene, x, y, range = 150, fireRate = 800)
+    constructor (scene, x, y, range = 150, fireRate = 800, damage = 10)
     {
         super(scene, x, y);
 
         this.range = range;
         this.fireRate = fireRate;
+        this.damage = damage;
         this.fireCooldown = 0;
         this.target = null;
 
@@ -71,6 +72,6 @@ export class Tower extends GameObjects.Container
 
     shoot (target)
     {
-        this.scene.spawnProjectile(this.x, this.y, target.x, target.y);
+        this.scene.spawnProjectile(this.x, this.y, target.x, target.y, this.damage);
     }
 }

@@ -1,8 +1,11 @@
 import { GameObjects } from 'phaser';
+import { applyDamage, isDead } from '../logic/damage';
+
+const GOLD_REWARD = 5;
 
 export class Enemy extends GameObjects.Arc
 {
-    constructor (scene, path, speed = 80)
+    constructor (scene, path, speed = 80, maxHealth = 30)
     {
         const start = path[0];
 
@@ -12,7 +15,22 @@ export class Enemy extends GameObjects.Arc
         this.speed = speed;
         this.targetIndex = 1;
 
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
+
         scene.add.existing(this);
+    }
+
+    takeDamage (amount)
+    {
+        this.health = applyDamage(this.health, amount);
+
+        if (isDead(this.health))
+        {
+            //  Only a damage kill pays out gold - reaching the end of the path does not
+            this.scene.awardGold(GOLD_REWARD);
+            this.destroy();
+        }
     }
 
     update (time, delta)
